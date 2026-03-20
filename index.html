@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trading Panel</title>
+</head>
+<body>
+
+<h2>Trading Control Panel</h2>
+
+<label>Symbol:</label>
+<select id="symbol">
+  <option value="NIFTY">NIFTY</option>
+</select>
+<br><br>
+
+<label>Quantity:</label>
+<input type="number" id="qty" value="50">
+<br><br>
+
+<label>Stop Loss:</label>
+<input type="number" id="sl" value="6">
+<br><br>
+
+<button onclick="sendOrder('BUY')">BUY</button>
+<button onclick="sendOrder('SELL')">SELL</button>
+
+<script>
+function sendOrder(side) {
+  fetch("https://tradingapps-production.up.railway.app/trade", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      symbol: document.getElementById("symbol").value,
+      qty: parseInt(document.getElementById("qty").value),
+      side: side,
+      sl: parseFloat(document.getElementById("sl").value)
+    })
+  })
+  .then(res => res.json())
+  .then(data => alert(JSON.stringify(data)))
+  .catch(err => alert("Error: " + err));
+}
+</script>
+
+</body>
+</html>
